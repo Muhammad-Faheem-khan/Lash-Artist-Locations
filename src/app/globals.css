@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* src/app/globals.css */
+/* @import '~antd/dist/antd.css'; Include Ant Design styles */
 
 :root {
   --background: #ffffff;
@@ -17,11 +19,41 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Noto Serif", serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.ant-checkbox-inner {
+  border-color: #dbcab8 !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #dbcab8 !important;
+  border-color: #dbcab8 !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: white !important;
+}
+
+.ant-select .ant-select-selector {
+  background-color: #ede6de3d !important;
+  padding: 24px 20px 10px 10px !important;
+  z-index: 10 !important;
+}
+
+.ant-drawer-header {
+  display: none !important;
+}
+.ant-drawer-body {
+  padding: 0 !important;
+}
+
+.ant-modal-content {
+  border-radius: 18px !important;
 }
