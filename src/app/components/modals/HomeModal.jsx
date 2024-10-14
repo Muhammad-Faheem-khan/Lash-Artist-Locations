@@ -12,7 +12,7 @@ const notoSerif = Noto_Serif({
 });
 
 export function HomeModal() {
-  const [isopen, setIsOpen] = useState(false);
+  const [isopen, setIsOpen] = useState(true);
   const [apiLoading, setApiLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -83,7 +83,7 @@ export function HomeModal() {
         </span>
       }
     >
-      <div className="h-[65vh] relative flex flex-col items-center justify-center overflow-y-hidden bg-[#EDE6DE]  lg:grid lg:grid-cols-5 lg:justify-items-center lg:content-center rounded-2xl">
+      <div className="h-[75vh] relative flex flex-col items-center justify-center overflow-y-hidden bg-[#EDE6DE]  lg:grid lg:grid-cols-5 lg:justify-items-center lg:content-center rounded-2xl">
         <div className="relative lg:col-span-3 col-span-5 flex flex-col py-10 md:w-[70%] w-[80%] justify-center space-y-4 lg:mt-0">
           <div className="space-y-2">
             <h1 className="font-medium lg:text-3xl md:text-2xl">
