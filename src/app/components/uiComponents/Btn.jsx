@@ -1,11 +1,11 @@
 import React from "react";
 
-export default function Btn({ color, isLoading, text, type, className }) {
+export default function Btn({ isLoading, text, type, className }) {
   return (
     <button
       type={type}
       disabled={isLoading}
-      className={`border border-1 rounded-full md:py-3 py-2 mt-4 flex justify-center items-center font-semibold bg-${color} ${className}`}
+      className={`border border-1 rounded-full md:py-3 py-2 mt-4 flex justify-center items-center font-semibold  ${className}`}
     >
       {isLoading ? (
         <svg

@@ -11,19 +11,6 @@ function Profile() {
       <div className="relative z-[300">
         <div className="flex justify-between items-center ">
           <h3 className="text-xl text-[#746253]">Basic Information</h3>
-          <Link
-            href={"profile/edit"}
-            className="text-[#746253]  flex items-center bg-primary rounded-full px-3 py-2"
-          >
-            <Image
-              className="mr-2"
-              src="/assets/svgs/icons/edit-icon.svg"
-              width={12}
-              height={12}
-              alt="edit"
-            />
-            <span className="text-xs">Edit Profile</span>
-          </Link>
         </div>
         <div className="grid grid-cols-3 mt-6">
           <InfoUnit heading="Age" value="24 Years" />

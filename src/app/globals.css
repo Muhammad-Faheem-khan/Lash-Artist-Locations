@@ -29,12 +29,12 @@ body {
 }
 
 .ant-checkbox-inner {
-  border-color: #dbcab8 !important;
+  border-color: #746253 !important;
 }
 
 .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #dbcab8 !important;
-  border-color: #dbcab8 !important;
+  background-color: #746253 !important;
+  border-color: #746253 !important;
 }
 
 .ant-checkbox-checked .ant-checkbox-inner::after {
@@ -43,8 +43,6 @@ body {
 
 .ant-select .ant-select-selector {
   background-color: #ede6de3d !important;
-  padding: 24px 20px 10px 10px !important;
-  z-index: 10 !important;
 }
 
 .ant-drawer-header {
@@ -54,6 +52,12 @@ body {
   padding: 0 !important;
 }
 
+.ant-modal-header{
+  margin: 0px !important;
+}
+
 .ant-modal-content {
   border-radius: 18px !important;
+  padding: 0 !important;
 }
+

@@ -36,7 +36,7 @@ export function Sidebar({ open, handleDrawer }) {
           className={`sidebar-inner flex flex-shrink-0 flex-col justify-between px-4 py-6 text-base bg-white  text-carbon-800 font-medium `}
           style={{ height: "calc(100vh - 70px)" }}
         >
-          <div className="flex justify-center">
+          <div className="flex justify-center" onClick={onClose}>
             <Link href="/">
               <Image
                 className="mx-2"
@@ -48,10 +48,10 @@ export function Sidebar({ open, handleDrawer }) {
             </Link>
           </div>
 
-          <div className="pt-12 flex-grow">
+          <div className="pt-12 flex-grow"  onClick={onClose}>
             <SidebarItem
               icon="/assets/svgs/sidebar/dashboard.svg"
-              route="/home"
+              route="/"
               name="Home"
             />
             <SidebarItem

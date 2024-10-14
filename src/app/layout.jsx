@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         <div className="relative z-0   h-screen w-screen overflow-hidden">
           <SubLayout />
 
-          <div className="bg-[#f7f9f9] h-full w-full min-h-screen overflow-scroll pb-12">
+          <div className="bg-[#f7f9f9] h-full w-full min-h-screen overflow-hidden pb-12">
             {children}
           </div>
         </div>
