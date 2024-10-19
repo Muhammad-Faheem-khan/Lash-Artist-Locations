@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default async function SocialUnit({ icon, value }) {
+export default function SocialUnit({ icon, value }) {
   return (
     <div className="md:col-span-2 col-span-5 my-4 flex items-center">
       <div className="p-2 rounded-full bg-primary opacity-50">

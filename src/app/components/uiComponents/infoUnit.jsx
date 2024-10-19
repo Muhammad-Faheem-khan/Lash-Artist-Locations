@@ -1,4 +1,4 @@
-export default async function InfoUnit({ heading, value }) {
+export default function InfoUnit({ heading, value }) {
   return (
     <div className="md:col-span-1 col-span-3 my-4">
       <p className="text-secondary text-sm font-extralight">{heading}</p>

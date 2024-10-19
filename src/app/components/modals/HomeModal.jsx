@@ -31,7 +31,7 @@ export function HomeModal() {
     lightHQ: "#787777",
   });
 
-  const handleSearch = async (values) => {
+  const handleSearch = (values) => {
     try {
       setApiLoading(true);
       const { lightHeart, certifiedArtist, educators, retail, lightHQ } =

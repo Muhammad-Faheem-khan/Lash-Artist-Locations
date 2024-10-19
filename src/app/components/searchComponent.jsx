@@ -1,20 +1,27 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { AutoComplete, Input, Select } from "antd";
+import {
+  AutoComplete,
+  Checkbox,
+  Dropdown,
+  Input,
+  Pagination,
+  Select,
+} from "antd";
 import useGoogleMapsApi from "../context/GoogleMapContext";
-import { ARTISTINFO } from "../../../utils/constants";
+import { ARTISTINFO, SORTFILTEROPTIONS } from "../utils/constants";
 
 export function SearchSiderbar() {
   const [isOpen, setIsOpen] = useState(true);
   const [options, setOptions] = useState([]);
   const [address, setAddress] = useState("");
+  const [open, setOpen] = useState(false);
+  const [checkedItems, setCheckedItems] = useState({});
+  const [userList, setUserList] = useState([0, 1, 2]);
+
   const GOOGLE_MAP_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
   const isLoaded = useGoogleMapsApi(GOOGLE_MAP_KEY);
-
-  const handleSider = () => {
-    setIsOpen((prev) => !prev);
-  };
 
   const handleAddressChange = (value) => {
     if (isLoaded && window.google) {
@@ -74,11 +81,56 @@ export function SearchSiderbar() {
     }
   };
 
-  const handleChange = () => {};
+  const handleChange = () => {
+    // api call
+  };
+
+  const handlePagination = (page) => {};
+
+  const handleCheckboxChange = (key) => {
+    console.log(key);
+    console.log(checkedItems);
+    setCheckedItems((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const handleMenuClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const menu = (
+    <div className="p-4 bg-white border border-[#E8E8E8] showdow-sm rounded-lg">
+      <div onClick={handleMenuClick}>
+        {SORTFILTEROPTIONS.map((item) => (
+          <div key={item.value} className="flex items-center mb-2">
+            <Checkbox
+              checked={checkedItems[item.value]}
+              onChange={() => handleCheckboxChange(item.value)}
+            >
+              {item.label}
+            </Checkbox>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <button
+          className=" bg-primary text-white px-2 py-1 rounded-lg"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          Filtter
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div
-      className={`fixed top-[5rem] left-[1rem] h-[88vh] py-2 mb-10 z-[300] bg-white rounded-xl ${!isOpen && "left-[-1.2rem]"}`}
+      className={`fixed top-[5rem] h-[88vh] py-2 mb-10 z-[300] bg-white rounded-xl ${!isOpen ? "left-[-20px]" : "left-[15px]" }`}
     >
       {isOpen ? (
         <button
@@ -142,16 +194,11 @@ export function SearchSiderbar() {
               Sort By
             </label>
             <Select
-              defaultValue="lucy"
+              defaultValue="lashArtist"
               size="large"
               className="w-full  text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
               onChange={handleChange}
-              options={[
-                { value: "jack", label: "Jack" },
-                { value: "lucy", label: "Lucy" },
-                { value: "Yiminghe", label: "yiminghe" },
-                { value: "disabled", label: "Disabled", disabled: true },
-              ]}
+              options={SORTFILTEROPTIONS}
             />
           </div>
 
@@ -159,49 +206,73 @@ export function SearchSiderbar() {
             <label className="font-medium w-full my-1 text-[#545454] text-sm">
               Filter
             </label>
-            <button className="mt-2">
-              <Image
-                src="/assets/svgs/icons/filter-icon.svg"
-                width={40}
-                height={40}
-                alt="filter"
-              />
-            </button>
+
+            <Dropdown
+              overlay={menu}
+              trigger={["click"]}
+              open={open}
+              onOpenChange={(visible) => setOpen(visible)}
+            >
+              <button className="mt-2" onClick={(e) => e.preventDefault()}>
+                <Image
+                  src="/assets/svgs/icons/filter-icon.svg"
+                  width={40}
+                  height={40}
+                  alt="filter"
+                />
+              </button>
+            </Dropdown>
           </div>
         </div>
 
-        <div className="mt-8 ">
-          {[1, 2, 3].map((value) => (
-            <div className="flex items-start mb-4 pb-4 border-b-2 border-[#5B5B5B]" key={value}>
-              <Image
-                src="/assets/images/demo-img.png"
-                width={110}
-                height={110}
-                alt="img"
-              />
-              <div className="ml-6">
-                <h3 className="text-[#746253] text-lg">
-                  Lucky Girls Beauty Club
-                </h3>
-                {ARTISTINFO.map((artist) => (
-                  <div className="flex items-center mt-2" key={artist.icon}>
-                    <Image
-                      src={artist.icon}
-                      width={16}
-                      height={16}
-                      alt="icon"
-                    />
-                    <p className="ml-3 text-[#5B5B5B] text-sm">{artist.text}</p>
-                  </div>
-                ))}
+        <div className="my-8">
+          {userList && userList.length > 0 ? (
+            userList.map((value) => (
+              <div
+                className="flex items-start mb-4 pb-4 border-b-2 border-[#5B5B5B]"
+                key={value}
+              >
+                <Image
+                  src="/assets/images/demo-img.png"
+                  width={110}
+                  height={110}
+                  alt="img"
+                />
+                <div className="ml-6">
+                  <h3 className="text-[#746253] text-lg">
+                    Lucky Girls Beauty Club
+                  </h3>
+                  {ARTISTINFO.map((artist) => (
+                    <div className="flex items-center mt-2" key={artist.icon}>
+                      <Image
+                        src={artist.icon}
+                        width={16}
+                        height={16}
+                        alt="icon"
+                      />
+                      <p className="ml-3 text-[#5B5B5B] text-sm">
+                        {artist.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-[#746253] p-4 bg-[#F0F0F0] text-xs mt-5">
+              There are no results found based on your current search
+            </p>
+          )}
         </div>
-
-        <p className="text-[#746253] p-4 bg-[#F0F0F0] text-xs mt-5">
-          There are no results found based on your current search
-        </p>
+        <div className="flex justify-center">
+          <Pagination
+            current={0}
+            total={5}
+            pageSize={10}
+            onChange={handlePagination}
+            className="my-4"
+          />
+        </div>
       </div>
     </div>
   );

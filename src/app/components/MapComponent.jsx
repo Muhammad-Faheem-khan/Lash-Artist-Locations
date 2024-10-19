@@ -8,10 +8,15 @@ const containerStyle = {
   height: "100%",
 };
 
+const userTypeIcons = {
+  lashArtist: "/assets/icons/star-icon.svg",
+  student: "/assets/icons/heart.png",
+  retailPartner: "/assets/icons/shopping-cart.png",
+  educator: "/assets/icons/graduation-cap.png",
+};
+
 const MapComponent = ({
-  location,
-  setLocation,
-  onLocationChange,
+  location
 }) => {
   const GOOGLE_MAP_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
   const isLoaded = useGoogleMapsApi(GOOGLE_MAP_KEY);
