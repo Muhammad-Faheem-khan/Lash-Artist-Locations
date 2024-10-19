@@ -19,7 +19,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Noto Serif", serif;
+  font-family: "Noto Serif", serif !important;
 }
 
 @layer utilities {
@@ -52,7 +52,7 @@ body {
   padding: 0 !important;
 }
 
-.ant-modal-header{
+.ant-modal-header {
   margin: 0px !important;
 }
 
@@ -66,4 +66,8 @@ body {
 }
 .ant-pagination-item-active > a {
   color: #746253 !important;
+}
+
+.gm-style-iw-chr {
+  display: none;
 }

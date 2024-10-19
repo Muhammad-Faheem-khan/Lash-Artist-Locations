@@ -16,12 +16,11 @@ export function HomeModal() {
   const [apiLoading, setApiLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const [isClient, setIsClient] = useState(false); 
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
 
   const [checkboxColors, setCheckboxColors] = useState({
     lightHeart: "#2A2A2A",
@@ -36,8 +35,6 @@ export function HomeModal() {
       setApiLoading(true);
       const { lightHeart, certifiedArtist, educators, retail, lightHQ } =
         values;
-
-        console.log(lightHeart, certifiedArtist, educators, retail, lightHQ )
     } catch (error) {
       form.resetFields();
       messageApi.error(

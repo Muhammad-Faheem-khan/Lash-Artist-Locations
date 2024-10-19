@@ -33,3 +33,16 @@ export const SORTFILTEROPTIONS = [
   { value: "educators", label: "Educators" },
 ];
 
+export const userTypeIcons = {
+  lashArtist: "/assets/svgs/icons/map-star.svg",
+  student: "/assets/svgs/icons/map-heart.svg",
+  retailPartner: "/assets/svgs/icons/map-cart.svg",
+  educator: "/assets/svgs/icons/map-student.svg",
+};
+
+export const userCardIcons = {
+  lashArtist: "/assets/svgs/icons/card-star.svg",
+  student: "/assets/svgs/icons/card-heart.svg",
+  retailPartner: "/assets/svgs/icons/card-retail.svg",
+  educator: "/assets/svgs/icons/card-educator.svg",
+};

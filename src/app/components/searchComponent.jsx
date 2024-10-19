@@ -10,9 +10,9 @@ import {
   Select,
 } from "antd";
 import useGoogleMapsApi from "../context/GoogleMapContext";
-import { ARTISTINFO, SORTFILTEROPTIONS } from "../utils/constants";
+import { ARTISTINFO, SORTFILTEROPTIONS } from "../../../utils/constants";
 
-export function SearchSiderbar() {
+export function SearchSiderbar({ handleLocationChange }) {
   const [isOpen, setIsOpen] = useState(true);
   const [options, setOptions] = useState([]);
   const [address, setAddress] = useState("");
@@ -63,12 +63,9 @@ export function SearchSiderbar() {
         geocoder.geocode({ placeId: option.placeId }, (results, status) => {
           if (status === "OK") {
             const location = results[0]?.geometry.location;
-            const newLocation = {
-              type: "Point",
-              coordinates: [location.lat(), location.lng()],
-            };
-            setLocation(newLocation);
-            onLocationChange(newLocation, results[0]?.formatted_address);
+            const newLocation = [location.lat(), location.lng()];
+            handleLocationChange(newLocation);
+            setAddress("");
           } else {
             console.error(
               "Geocode was not successful for the following reason: " + status
@@ -88,8 +85,6 @@ export function SearchSiderbar() {
   const handlePagination = (page) => {};
 
   const handleCheckboxChange = (key) => {
-    console.log(key);
-    console.log(checkedItems);
     setCheckedItems((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -130,7 +125,7 @@ export function SearchSiderbar() {
 
   return (
     <div
-      className={`fixed top-[5rem] h-[88vh] py-2 mb-10 z-[300] bg-white rounded-xl ${!isOpen ? "left-[-20px]" : "left-[15px]" }`}
+      className={`fixed top-[5rem] h-[88vh] py-2 mb-10 z-[300] bg-white rounded-xl ${!isOpen ? "left-[-20px]" : "left-[15px]"}`}
     >
       {isOpen ? (
         <button
