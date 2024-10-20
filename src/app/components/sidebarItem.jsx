@@ -9,7 +9,7 @@ export function SidebarItem({ name, route, icon }) {
 
   return (
     <Link
-      href={route}
+      href={route} 
       className={`flex items-center text-customgray-1 hover:text-customgray-1 whitespace-nowrap py-3 px-2 mb-3 cursor-pointer text-base rounded-full transition-colors ${
         isActive
           ? "bg-primary text-[#746253] opacity-[45%] hover:bg-primary hover:opacity-75"

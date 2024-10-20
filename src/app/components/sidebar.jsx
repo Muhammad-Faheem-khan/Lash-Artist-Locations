@@ -59,11 +59,11 @@ export function Sidebar({ open, handleDrawer }) {
               route="/profile"
               name="Profile"
             />
-            <SidebarItem
+            {/* <SidebarItem
               icon="/assets/svgs/sidebar/search.svg"
               route="/search"
               name="Search"
-            />
+            /> */}
           </div>
         </div>
         <div className="flex justify-between py-2 px-4 border-t-2">

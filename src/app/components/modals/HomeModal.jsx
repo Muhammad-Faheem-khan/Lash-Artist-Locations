@@ -4,6 +4,7 @@ import { Checkbox, Form, Modal } from "antd";
 import Image from "next/image";
 import Btn from "../uiComponents/Btn";
 import { Noto_Serif } from "next/font/google";
+import { InitialCheckboxText, ValueToUserTypeMap } from "../../../../utils/constants";
 
 const notoSerif = Noto_Serif({
   weight: ["400", "700"],
@@ -11,7 +12,7 @@ const notoSerif = Noto_Serif({
   display: "swap",
 });
 
-export function HomeModal() {
+export function HomeModal({ fetchUsers }) {
   const [isopen, setIsOpen] = useState(true);
   const [apiLoading, setApiLoading] = useState(false);
   const [form] = Form.useForm();
@@ -22,24 +23,20 @@ export function HomeModal() {
     setIsClient(true);
   }, []);
 
-  const [checkboxColors, setCheckboxColors] = useState({
-    lightHeart: "#2A2A2A",
-    certifiedArtist: "#787777",
-    educators: "#787777",
-    retail: "#787777",
-    lightHQ: "#787777",
-  });
+  const [checkboxColors, setCheckboxColors] = useState(InitialCheckboxText);
 
   const handleSearch = (values) => {
     try {
       setApiLoading(true);
-      const { lightHeart, certifiedArtist, educators, retail, lightHQ } =
-        values;
-    } catch (error) {
+
+      const selectedUserTypes = Object.entries(ValueToUserTypeMap)
+        .filter(([key]) => values[key])
+        .map(([, userType]) => userType);
+
+      fetchUsers(undefined, selectedUserTypes,);
+      setIsOpen(false);
+    } catch (err) {
       form.resetFields();
-      messageApi.error(
-        error?.response?.data?.message || "Invalid Email or Password"
-      );
     } finally {
       setApiLoading(false);
     }
@@ -47,10 +44,10 @@ export function HomeModal() {
 
   const handleValuesChange = (changedValues, allValues) => {
     setCheckboxColors({
-      lightHeart: allValues.lightHeart ? "#2A2A2A" : "#787777",
-      certifiedArtist: allValues.certifiedArtist ? "#2A2A2A" : "#787777",
-      educators: allValues.educators ? "#2A2A2A" : "#787777",
-      retail: allValues.retail ? "#2A2A2A" : "#787777",
+      student: allValues.student ? "#2A2A2A" : "#787777",
+      leshArtist: allValues.leshArtist ? "#2A2A2A" : "#787777",
+      educator: allValues.educator ? "#2A2A2A" : "#787777",
+      partner: allValues.partner ? "#2A2A2A" : "#787777",
       lightHQ: allValues.lightHQ ? "#2A2A2A" : "#787777",
     });
   };
@@ -93,53 +90,51 @@ export function HomeModal() {
             form={form}
             onFinish={handleSearch}
             initialValues={{
-              lightHeart: true,
-              certifiedArtist: false,
-              educators: false,
-              retail: false,
+              student: true,
+              leshArtist: false,
+              educator: false,
+              partner: false,
               lightHQ: false,
             }}
             onValuesChange={handleValuesChange}
           >
-            <Form.Item
-              name="lightHeart"
-              className="mb-1"
-              valuePropName="checked"
-            >
+            <Form.Item name="student" className="mb-1" valuePropName="checked">
               <Checkbox>
-                <p style={{ color: checkboxColors.lightHeart }}>
+                <p style={{ color: checkboxColors.student }}>
                   Artists Using Light Heart Products
                 </p>
               </Checkbox>
             </Form.Item>
 
             <Form.Item
-              name="certifiedArtist"
+              name="leshArtist"
               className="mb-1"
               valuePropName="checked"
             >
               <Checkbox>
-                <p style={{ color: checkboxColors.certifiedArtist }}>
+                <p style={{ color: checkboxColors.leshArtist }}>
                   Light Heart Certified Artists
                 </p>
               </Checkbox>
             </Form.Item>
 
             <Form.Item
-              name="educators"
+              name="educator"
               className="mb-1"
               valuePropName="checked"
             >
               <Checkbox>
-                <p style={{ color: checkboxColors.educators }}>
+                <p style={{ color: checkboxColors.educator }}>
                   Light Heart Certified Educators
                 </p>
               </Checkbox>
             </Form.Item>
 
-            <Form.Item name="retail" className="mb-1" valuePropName="checked">
+            <Form.Item name="partner" className="mb-1" valuePropName="checked">
               <Checkbox>
-                <p style={{ color: checkboxColors.retail }}>Retail Locations</p>
+                <p style={{ color: checkboxColors.partner }}>
+                  Retail Locations
+                </p>
               </Checkbox>
             </Form.Item>
 

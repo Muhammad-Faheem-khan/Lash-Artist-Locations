@@ -1,48 +1,46 @@
-export const ARTISTINFO = [
-  {
-    icon: "/assets/svgs/icons/star-icon.svg",
-    type: "star",
-    text: "Lush Artist",
-  },
-  {
-    icon: "/assets/svgs/icons/location-icon.svg",
-    type: "location",
-    text: "6969 E Shea Blvd.",
-  },
-  {
-    icon: "/assets/svgs/icons/social-icon.svg",
-    type: "social",
-    text: "luckygirls.beautyclub",
-  },
-  {
-    icon: "/assets/svgs/icons/website-icon.svg",
-    type: "website",
-    text: "view webiste",
-  },
-  {
-    icon: "/assets/svgs/icons/view-profile.svg",
-    type: "profile",
-    text: "view profile",
-  },
+
+export const FILTEROPTIONS = [
+  { value: "leshArtist", label: "Lash Artists" },
+  { value: "student", label: "Students" },
+  { value: "partner", label: "Retail Partners" },
+  { value: "educator", label: "Educators" },
 ];
 
-export const SORTFILTEROPTIONS = [
-  { value: "lashArtist", label: "Lash Artists" },
-  { value: "students", label: "Students" },
-  { value: "partners", label: "Retail Partners" },
-  { value: "educators", label: "Educators" },
-];
+export const SORTOPTIONS = [
+  { value: 5, label: "Nearest" },
+  { value: 10, label: "10 KM Radius" },
+  { value: 20, label: "20 KM Radius" },
+  { value: 50, label: "50 KM Radius" },]
 
 export const userTypeIcons = {
-  lashArtist: "/assets/svgs/icons/map-star.svg",
+  leshArtist: "/assets/svgs/icons/map-star.svg",
   student: "/assets/svgs/icons/map-heart.svg",
-  retailPartner: "/assets/svgs/icons/map-cart.svg",
+  partner: "/assets/svgs/icons/map-cart.svg",
   educator: "/assets/svgs/icons/map-student.svg",
 };
 
 export const userCardIcons = {
-  lashArtist: "/assets/svgs/icons/card-star.svg",
+  leshArtist: "/assets/svgs/icons/card-star.svg",
   student: "/assets/svgs/icons/card-heart.svg",
-  retailPartner: "/assets/svgs/icons/card-retail.svg",
+  partner: "/assets/svgs/icons/card-retail.svg",
   educator: "/assets/svgs/icons/card-educator.svg",
 };
+
+export const InitialCheckboxText = {
+  student: "#2A2A2A",
+  leshArtist: "#787777",
+  educator: "#787777",
+  partner: "#787777",
+  lightHQ: "#787777",
+}
+
+export const ValueToUserTypeMap = {
+  student: "student",
+  leshArtist: "leshArtist",
+  educator: "educator",
+  partner: "partner",
+};
+
+export const Radius = 10
+
+export const PageLimit = 10
