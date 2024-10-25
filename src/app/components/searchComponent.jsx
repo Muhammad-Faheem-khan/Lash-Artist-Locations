@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   AutoComplete,
@@ -11,6 +11,7 @@ import {
 } from "antd";
 import useGoogleMapsApi from "../context/GoogleMapContext";
 import {
+  allRoles,
   FILTEROPTIONS,
   PageLimit,
   SORTOPTIONS,
@@ -23,6 +24,8 @@ export function SearchSiderbar({
   fetchUsers,
   handleSort,
   sortValue,
+  rolesArray,
+  setRolesArray,
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [options, setOptions] = useState([]);
@@ -31,9 +34,17 @@ export function SearchSiderbar({
   const [checkedItems, setCheckedItems] = useState({});
 
   const router = useRouter();
-
   const GOOGLE_MAP_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
   const isLoaded = useGoogleMapsApi(GOOGLE_MAP_KEY);
+
+  useEffect(() => {
+    const rolesObject = allRoles.reduce((acc, role) => {
+      console.log(role);
+      acc[role] = rolesArray.includes(role);
+      return acc;
+    }, {});
+    setCheckedItems(rolesObject);
+  }, [rolesArray]);
 
   const handleAddressChange = (value) => {
     if (isLoaded && window.google) {
@@ -89,7 +100,7 @@ export function SearchSiderbar({
     }
   };
 
-  const handleSorting = (value) => {
+  const handleFilteringByRadius = (value) => {
     const rolesArray = Object.keys(checkedItems).filter(
       (key) => checkedItems[key]
     );
@@ -101,7 +112,7 @@ export function SearchSiderbar({
     const rolesArray = Object.keys(checkedItems).filter(
       (key) => checkedItems[key]
     );
-
+    setRolesArray(rolesArray);
     fetchUsers(sortValue, rolesArray);
     setOpen(false);
   };
@@ -126,7 +137,7 @@ export function SearchSiderbar({
   };
 
   const menu = (
-    <div className="p-4 bg-white border border-[#E8E8E8] showdow-sm rounded-lg">
+    <div className="p-4 px-6 bg-white border border-[#E8E8E8] showdow-sm rounded-lg">
       <div onClick={handleMenuClick}>
         {FILTEROPTIONS.map((item) => (
           <div key={item.value} className="flex items-center mb-2">
@@ -142,7 +153,7 @@ export function SearchSiderbar({
 
       <div className="flex justify-center mt-4">
         <button
-          className=" bg-primary text-white px-2 py-1 rounded-lg"
+          className=" bg-[#746253] text-white px-4 py-1 rounded-lg"
           onClick={handleFiltering}
         >
           Filter
@@ -198,13 +209,19 @@ export function SearchSiderbar({
           <Input
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="w-full px-3 pt-4 pb-2 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
+            className="w-full  pt-4 pb-2 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
             suffix={
               <Image
-                src="/assets/svgs/icons/search-icon.svg"
+                src={
+                  address
+                    ? "assets/svgs/icons/close-btn.svg"
+                    : "/assets/svgs/icons/search-icon.svg"
+                }
+                onClick={() => {
+                  setAddress("");
+                }}
                 width={20}
                 height={20}
-                className="mr-2"
                 alt="search"
               />
             }
@@ -214,14 +231,14 @@ export function SearchSiderbar({
         <div className="mt-5 flex justify-between">
           <div className="w-[75%]">
             <label className="font-medium w-full my-1 text-[#545454] text-sm">
-              Sort By
+              Find By radius
             </label>
             <Select
               defaultValue="5"
               size="large"
               value={sortValue}
               className="w-full  text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
-              onChange={handleSorting}
+              onChange={handleFilteringByRadius}
               options={SORTOPTIONS}
             />
           </div>
@@ -346,7 +363,7 @@ export function SearchSiderbar({
             </p>
           )}
         </div>
-        {resposne.customers && resposne.customers?.length > 10 && (
+        {resposne?.customers && resposne.customers?.length > 10 && (
           <div className="flex justify-center">
             <Pagination
               current={resposne?.pagination?.page}

@@ -8,11 +8,3 @@ export const getNearByUsers = async (payload) => {
   
     return res;
   };
-
-// export const getUserById = async (id) => {
-//   const res = await axiosGet({
-//     path: `find-by-userId?userId=${id}`,
-//   });
-
-//   return res;
-// };

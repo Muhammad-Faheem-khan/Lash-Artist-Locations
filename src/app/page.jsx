@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import MapComponent from "./components/MapComponent";
 import { HomeModal } from "./components/modals/HomeModal";
 import { SearchSiderbar } from "./components/searchComponent";
@@ -107,6 +107,7 @@ export default function Home() {
   const [locationError, setLocationError] = useState(null);
   const [userList, setUserList] = useState([]);
   const [sortValue, setSortValue] = useState(5);
+  const [rolesArray, setRolesArray] = useState([]);
 
   useEffect(() => {
     fetchUserLocation();
@@ -165,7 +166,7 @@ export default function Home() {
 
   useEffect(() => {
     if (userLocation) {
-      fetchUsers();
+      fetchUsers(sortValue, rolesArray);
     }
   }, [userLocation]);
 
@@ -195,25 +196,29 @@ export default function Home() {
   }
 
   return (
-    <main>
-      {userLocation && (
-        <>
-          <HomeModal fetchUsers={fetchUsers} />
-          <MapComponent
-            sortValue={sortValue}
-            location={userLocation}
-            users={userList?.customers}
-          />
-          <SearchSiderbar
-            resposne={userList}
-            sortValue={sortValue}
-            handleSort={setSortValue}
-            location={userLocation}
-            fetchUsers={fetchUsers}
-            handleLocationChange={setUserLocation}
-          />
-        </>
-      )}
-    </main>
+    <Suspense fallback={<Loading />}>
+      <main>
+        {userLocation && (
+          <>
+            <HomeModal setRolesArray={setRolesArray} fetchUsers={fetchUsers} />
+            <MapComponent
+              sortValue={sortValue}
+              location={userLocation}
+              users={userList?.customers}
+            />
+            <SearchSiderbar
+              resposne={userList}
+              sortValue={sortValue}
+              handleSort={setSortValue}
+              location={userLocation}
+              fetchUsers={fetchUsers}
+              setRolesArray={setRolesArray}
+              rolesArray={rolesArray}
+              handleLocationChange={setUserLocation}
+            />
+          </>
+        )}
+      </main>
+    </Suspense>
   );
 }

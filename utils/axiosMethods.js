@@ -15,7 +15,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // Add a response interceptor
@@ -35,25 +35,23 @@ instance.interceptors.response.use(
       // Redirect to /login when a 401 error occurs
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export const axiosGet = async ({ path }) => {
-  const res = await instance.get(path);
-  return res;
+  try {
+    const res = await instance.get(path);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const axiosPost = async ({ path, payload }) => {
-  const res = await instance.post(path, payload);
-  return res;
-};
-
-export const axiosPatch = async ({ path, payload }) => {
-  const res = await instance.patch(path, payload);
-  return res;
-};
-
-export const axiosDelete = async ({ path }) => {
-  const res = await instance.delete(path);
-  return res;
+  try {
+    const res = await instance.post(path, payload);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
 };

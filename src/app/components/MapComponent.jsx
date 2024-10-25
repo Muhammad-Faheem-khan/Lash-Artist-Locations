@@ -46,8 +46,8 @@ const MapComponent = ({ location, users, sortValue }) => {
   const radiusToZoomLevel = () => {
     if (sortValue == 5) return 17;
     if (sortValue == 10) return 15;
-    if (sortValue == 20) return 14;
-    if (sortValue == 50) return 12;
+    if (sortValue == 20) return 12;
+    if (sortValue == 50) return 11;
     return 10;
   };
 

@@ -1,4 +1,3 @@
-
 export const FILTEROPTIONS = [
   { value: "leshArtist", label: "Lash Artists" },
   { value: "student", label: "Students" },
@@ -6,11 +5,20 @@ export const FILTEROPTIONS = [
   { value: "educator", label: "Educators" },
 ];
 
+export const allRoles = [
+  "student",
+  "leshArtist",
+  "partner",
+  "educator",
+  "lightHQ",
+];
+
 export const SORTOPTIONS = [
   { value: 5, label: "Nearest" },
   { value: 10, label: "10 KM Radius" },
   { value: 20, label: "20 KM Radius" },
-  { value: 50, label: "50 KM Radius" },]
+  { value: 50, label: "50 KM Radius" },
+];
 
 export const userTypeIcons = {
   leshArtist: "/assets/svgs/icons/map-star.svg",
@@ -32,7 +40,7 @@ export const InitialCheckboxText = {
   educator: "#787777",
   partner: "#787777",
   lightHQ: "#787777",
-}
+};
 
 export const ValueToUserTypeMap = {
   student: "student",
@@ -41,6 +49,6 @@ export const ValueToUserTypeMap = {
   partner: "partner",
 };
 
-export const Radius = 10
+export const Radius = 5;
 
-export const PageLimit = 10
+export const PageLimit = 10;

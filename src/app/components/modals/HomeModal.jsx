@@ -4,7 +4,10 @@ import { Checkbox, Form, Modal } from "antd";
 import Image from "next/image";
 import Btn from "../uiComponents/Btn";
 import { Noto_Serif } from "next/font/google";
-import { InitialCheckboxText, ValueToUserTypeMap } from "../../../../utils/constants";
+import {
+  InitialCheckboxText,
+  ValueToUserTypeMap,
+} from "../../../../utils/constants";
 
 const notoSerif = Noto_Serif({
   weight: ["400", "700"],
@@ -12,7 +15,7 @@ const notoSerif = Noto_Serif({
   display: "swap",
 });
 
-export function HomeModal({ fetchUsers }) {
+export function HomeModal({ fetchUsers, setRolesArray }) {
   const [isopen, setIsOpen] = useState(true);
   const [apiLoading, setApiLoading] = useState(false);
   const [form] = Form.useForm();
@@ -32,8 +35,8 @@ export function HomeModal({ fetchUsers }) {
       const selectedUserTypes = Object.entries(ValueToUserTypeMap)
         .filter(([key]) => values[key])
         .map(([, userType]) => userType);
-
-      fetchUsers(undefined, selectedUserTypes,);
+      setRolesArray(selectedUserTypes);
+      fetchUsers(undefined, selectedUserTypes);
       setIsOpen(false);
     } catch (err) {
       form.resetFields();
@@ -118,11 +121,7 @@ export function HomeModal({ fetchUsers }) {
               </Checkbox>
             </Form.Item>
 
-            <Form.Item
-              name="educator"
-              className="mb-1"
-              valuePropName="checked"
-            >
+            <Form.Item name="educator" className="mb-1" valuePropName="checked">
               <Checkbox>
                 <p style={{ color: checkboxColors.educator }}>
                   Light Heart Certified Educators
