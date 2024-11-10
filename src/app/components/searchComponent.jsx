@@ -78,6 +78,12 @@ export function SearchSiderbar({
     }
   };
 
+  const handleClearSearch = () => {
+    const currentLocation = JSON.parse(localStorage.getItem('location'))
+    setAddress("")
+    handleLocationChange(currentLocation)
+  }
+
   const handleSelect = (value, option) => {
     if (isLoaded && window.google) {
       try {
@@ -217,9 +223,7 @@ export function SearchSiderbar({
                     ? "assets/svgs/icons/close-btn.svg"
                     : "/assets/svgs/icons/search-icon.svg"
                 }
-                onClick={() => {
-                  setAddress("");
-                }}
+                onClick={handleClearSearch}
                 width={20}
                 height={20}
                 alt="search"
