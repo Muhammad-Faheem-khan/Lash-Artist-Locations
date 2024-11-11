@@ -44,6 +44,9 @@ body {
 .ant-select .ant-select-selector {
   background-color: #ede6de3d !important;
 }
+.ant-select-selection-item{
+  margin-top: 8px !important;
+}
 
 .ant-drawer-header {
   display: none !important;
@@ -59,6 +62,10 @@ body {
 .ant-modal-content {
   border-radius: 18px !important;
   padding: 0 !important;
+}
+.ant-modal-title > span{
+  padding: 10px !important;
+  padding-top: 15px !important;
 }
 
 .ant-pagination-item-active {

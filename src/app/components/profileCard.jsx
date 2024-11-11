@@ -12,13 +12,13 @@ export function ProfileCard() {
   return (
     <div className="lg:col-span-2 col-span-6 lg:mr-4 mr-0 flex flex-col items-center rounded-xl shadow-lg bg-white px-6 py-6 mt-4">
       <Image
-        src="/assets/images/image2.png"
+        src="/assets/svgs/default-user.svg"
         width={155}
         height={155}
         alt="profile img"
       />
-      <h3 className="text-2xl text-[#746253]">Anaya Groover</h3>
-      <p className=" text-secondary mt-1">Lush Artist</p>
+      <h3 className="text-2xl text-[#746253] mt-3">Anaya Groover</h3>
+      <p className=" text-secondary mt-1">Lash Artist</p>
       <p className="text-secondary text-xs text-center mt-4 leading-6">
         Some information Lorem Ipsum is simply dummy text of the printing and
         typesetting industry. Some information Lorem Ipsum is simply dummy text

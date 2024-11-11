@@ -52,3 +52,5 @@ export const ValueToUserTypeMap = {
 export const Radius = 5;
 
 export const PageLimit = 10;
+
+export const DEFAULT_LOCATION = [33.5817771, -111.9305882]

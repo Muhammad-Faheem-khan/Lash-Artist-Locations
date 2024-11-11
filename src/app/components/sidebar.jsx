@@ -56,14 +56,9 @@ export function Sidebar({ open, handleDrawer }) {
             />
             <SidebarItem
               icon="/assets/svgs/sidebar/profile.svg"
-              route="/profile"
+              route="/profile/1"
               name="Profile"
             />
-            {/* <SidebarItem
-              icon="/assets/svgs/sidebar/search.svg"
-              route="/search"
-              name="Search"
-            /> */}
           </div>
         </div>
         <div className="flex justify-between py-2 px-4 border-t-2">
