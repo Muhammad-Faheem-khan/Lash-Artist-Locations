@@ -9,6 +9,8 @@ export default function CustomInput({
   onChange,
   icon,
   labelText,
+  disabled = false,
+  ...props
 }) {
   const handleChange = (e) => {
     onChange(e.target.value);
@@ -23,15 +25,18 @@ export default function CustomInput({
 
       {type !== "password" ? (
         <Input
+          {...props}
           suffix={icon}
           size="large"
           onChange={handleChange}
           type={type}
           placeholder={placeholder}
+          disabled={disabled}
           className="w-full px-2 py-2 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
         />
       ) : (
         <Input.Password
+          minLength={4}
           iconRender={(visible) => (
             <div style={{ display: "flex", marginLeft: "6px" }}>
               {" "}

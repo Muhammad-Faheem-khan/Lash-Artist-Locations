@@ -39,7 +39,6 @@ export function SearchSiderbar({
 
   useEffect(() => {
     const rolesObject = allRoles.reduce((acc, role) => {
-      console.log(role);
       acc[role] = rolesArray.includes(role);
       return acc;
     }, {});

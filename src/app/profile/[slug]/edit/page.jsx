@@ -1,60 +1,79 @@
 "use client";
+import { getCustomerById, updateBusinessDetails } from "@/app/api/user";
 import { UploadImgModal } from "@/app/components/modals/uploadImgModal";
 import ProfileLayout from "@/app/components/ProfileLayout";
 import CustomInput from "@/app/components/uiComponents/InputField";
 import Loading from "@/app/components/uiComponents/loading";
 import useGoogleMapsApi from "@/app/context/GoogleMapContext";
-import { AutoComplete, Form, Input, Select } from "antd";
+import { AutoComplete, Form, Input, message, Select } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function Profile() {
   const [form] = Form.useForm();
+
   const [showModal, setShowModal] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
-  const [personalAddress, setPersonalAddress] = useState("");
-  const [personalOptions, setPersonalOptions] = useState([]);
-
   const [businessAddress, setBusinessAddress] = useState("");
+  const [businessLatLon, setBusinessLatLon] = useState([]);
   const [businessOptions, setBusinessOptions] = useState([]);
+  const [user, setUser] = useState(null);
+  const [userResponse, setUserResponse] = useState(null);
+
   const GOOGLE_MAP_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
   const isLoaded = useGoogleMapsApi(GOOGLE_MAP_KEY);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { slug } = useParams();
+  const router = useRouter()
+
   useEffect(() => {
     setIsPageLoaded(true);
   }, []);
 
-  const handlePersonalAddressChange = (value) => {
-    if (isLoaded && window.google) {
-      try {
-        setPersonalAddress(value);
-        if (value) {
-          const autocompleteService =
-            new window.google.maps.places.AutocompleteService();
-          autocompleteService.getPlacePredictions(
-            { input: value },
-            (predictions, status) => {
-              if (
-                status === window.google.maps.places.PlacesServiceStatus.OK &&
-                predictions
-              ) {
-                setPersonalOptions(
-                  predictions.map((prediction) => ({
-                    value: prediction.description,
-                    placeId: prediction.place_id,
-                  }))
-                );
-              }
-            }
-          );
-        } else {
-          setPersonalOptions([]);
-        }
-      } catch (err) {
-        console.log(err);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (slug) {
+        const res = await getCustomerById(slug);
+        const userData = {
+          name: `${res?.customer?.firstName || ""} ${res?.customer?.lastName || ""}`,
+          email: res?.customer?.email,
+          phone: res?.customer?.phone || "",
+          address:
+            res?.customer?.addresses?.[0]?.address1 +
+            res?.customer?.addresses?.[0]?.address2 +
+            res?.customer?.addresses?.[0]?.city +
+            res?.customer?.addresses?.[0]?.province +
+            res?.customer?.addresses?.[0]?.country,
+          businessName: res?.businessDetails?.name,
+          businessPhone: res?.businessDetails?.businessPhone,
+          services: res?.businessDetails?.services?.split(","),
+          courses: res?.businessDetails?.courses?.split(","),
+          instagramAccount: res?.businessDetails?.instagramAccount,
+          websiteLink: res?.businessDetails?.websiteLink,
+        };
+        setUserResponse(res);
+        console.log("updated User format", userData);
+        setUser(userData);
+        setBusinessAddress(res?.businessDetails?.address);
+        setBusinessLatLon([
+          res?.businessDetails?.latitude,
+          res?.businessDetails?.longitude,
+        ]);
       }
+    };
+
+    fetchData();
+  }, [slug]);
+
+  useEffect(() => {
+    if (user) {
+      console.log("user...", user);
+      form.setFieldsValue(user);
     }
-  };
+  }, [user, form]);
 
   const handleBusinessAddressChange = (value) => {
     if (isLoaded && window.google) {
@@ -88,25 +107,6 @@ function Profile() {
     }
   };
 
-  const handlePersonalSelect = (value, option) => {
-    if (isLoaded && window.google) {
-      try {
-        setPersonalAddress(value);
-        const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ placeId: option.placeId }, (results, status) => {
-          if (status === "OK") {
-            const location = results[0]?.geometry.location;
-            const newLocation = [location.lat(), location.lng()];
-          } else {
-            console.error("Geocode failed: " + status);
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
   const handleBusinessSelect = (value, option) => {
     if (isLoaded && window.google) {
       try {
@@ -116,6 +116,7 @@ function Profile() {
           if (status === "OK") {
             const location = results[0]?.geometry.location;
             const newLocation = [location.lat(), location.lng()];
+            setBusinessLatLon(newLocation);
           } else {
             console.error("Geocode failed: " + status);
           }
@@ -126,53 +127,82 @@ function Profile() {
     }
   };
 
+  const handleSubmitProfile = async (values) => {
+    const payload = {
+      name: values?.businessName,
+      address: businessAddress,
+      instagramAccount: values?.instagramAccount,
+      websiteLink: values?.websiteLink,
+      businessPhone: values?.businessPhone,
+      latitude: +businessLatLon[0] || 0,
+      longitude: +businessLatLon[1] || 0,
+      services: values?.services?.join(",") || "",
+      courses: values?.courses?.join(",") || "",
+    };
+
+    try {
+      const res = await updateBusinessDetails(payload, slug);
+      messageApi.success(res?.message);
+      router.push(`/profile/${slug}`)
+    } catch (error) {
+      messageApi.error(
+        error?.response?.data?.message || "Something went wrong"
+      );
+    }
+  };
+
   if (!isPageLoaded) {
     return <Loading />;
   }
 
   return (
-    <ProfileLayout>
+    <ProfileLayout user={userResponse}>
+      {contextHolder}
       <UploadImgModal showModal={showModal} handleModal={setShowModal} />
       <div className="relative z-[300]">
-        <Form form={form}>
-          <div className="flex justify-between items-center">
-            <h3
-              className="text-xl text-[#746253]"
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              Basic Information
-            </h3>
-            <div className="flex">
-              <Link
-                href="/profile/1"
-                className="text-[#993456] text-xs rounded-full px-5 py-2 mr-3 mt-4"
+        <Form form={form} onFinish={handleSubmitProfile}>
+          <div>
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl text-[#746253]">Basic Information</h3>
+              <div className="flex">
+                <Link
+                  href={`/profile/${slug}`}
+                  className="text-[#993456] text-xs rounded-full px-5 py-2 mr-3 mt-4"
+                >
+                  Cancel
+                </Link>
+                <Form.Item className="mt-4">
+                  <button
+                    type="submit"
+                    className="text-[#746253] text-xs bg-primary rounded-full px-5 py-2"
+                  >
+                    Save
+                  </button>
+                </Form.Item>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <button
+                className="text-[#746253] text-xs bg-primary rounded-full px-5 py-2"
+                onClick={(e) => {
+                  setShowModal(true);
+                  e.preventDefault();
+                }}
               >
-                Cancel
-              </Link>
-              <Form.Item className="mt-4">
-                <button className="text-[#746253] text-xs bg-primary rounded-full px-5 py-2">
-                  Save
-                </button>
-              </Form.Item>
+                Update Profile Picture
+              </button>
             </div>
           </div>
           <div className="grid grid-cols-2 mt-6">
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Name!",
-                },
-              ]}
             >
               <CustomInput
                 labelText="Name"
                 type="text"
                 placeholder="Shawn Murphy MD"
+                disabled={true}
                 icon={
                   <Image
                     src="/assets/svgs/icons/profile-icon.svg"
@@ -187,21 +217,12 @@ function Profile() {
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="email"
-              rules={[
-                {
-                  type: "email",
-                  message: "The input is not valid E-mail!",
-                },
-                {
-                  required: true,
-                  message: "Please input your E-mail!",
-                },
-              ]}
             >
               <CustomInput
                 labelText=" Email"
                 type="email"
                 placeholder="xyz@mail.com"
+                disabled={true}
                 icon={
                   <Image
                     src="/assets/svgs/icons/email-icon.svg"
@@ -216,17 +237,12 @@ function Profile() {
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="phone"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your phone number!",
-                },
-              ]}
             >
               <CustomInput
                 labelText="Phone"
                 type="text"
-                placeholder="+123 456 7899"
+                placeholder=""
+                disabled={true}
                 icon={
                   <Image
                     src="/assets/svgs/icons/phone-icon.svg"
@@ -238,21 +254,24 @@ function Profile() {
                 }
               />
             </Form.Item>
+
             <Form.Item
+              name="address"
               className="relative md:col-span-1 col-span-2 mr-3"
-              name="password"
             >
-              <CustomInput
-                labelText="Password"
-                type="password"
-                placeholder="*******"
-                icon={
+              <label className="block z-[300] opacity-50 font-medium w-full my-1  px-2 text-xs absolute top-[-3px]">
+                Personal Address
+              </label>
+              <Input
+                placeholder="Personal Address"
+                disabled={true}
+                className="px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
+                suffix={
                   <Image
-                    src="/assets/svgs/icons/lock-icon.svg"
+                    src="/assets/svgs/icons/search-icon.svg"
                     width={20}
                     height={20}
-                    className="ml-2 mr-2"
-                    alt="password"
+                    alt="search"
                   />
                 }
               />
@@ -261,6 +280,12 @@ function Profile() {
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="businessName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Business Name!",
+                },
+              ]}
             >
               <CustomInput
                 labelText="Business Name"
@@ -280,10 +305,15 @@ function Profile() {
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="businessPhone"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Business Phone!",
+                },
+              ]}
             >
               <CustomInput
                 labelText="Business Phone #"
-                type="text"
                 placeholder="678977917"
                 icon={
                   <Image
@@ -296,46 +326,8 @@ function Profile() {
                 }
               />
             </Form.Item>
-            <Form.Item
-              name="address"
-              className="relative md:col-span-1 col-span-2 mr-3"
-            >
-              <label className="block z-[300] opacity-50 font-medium w-full my-1  px-2 text-xs absolute top-[-3px]">
-                Personal Address
-              </label>
-              <AutoComplete
-                value={personalAddress}
-                options={personalOptions}
-                onChange={handlePersonalAddressChange}
-                onSelect={handlePersonalSelect}
-                className="w-full"
-              >
-                <Input
-                  placeholder="Personal Address"
-                  value={personalAddress}
-                  onChange={(e) => setPersonalAddress(e.target.value)}
-                  className="px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
-                  suffix={
-                    <Image
-                      src={
-                        personalAddress
-                          ? "/assets/svgs/icons/close-btn.svg"
-                          : "/assets/svgs/icons/search-icon.svg"
-                      }
-                      onClick={() => setPersonalAddress("")}
-                      width={20}
-                      height={20}
-                      alt="search"
-                    />
-                  }
-                />
-              </AutoComplete>
-            </Form.Item>
 
-            <Form.Item
-              name="businessAddress"
-              className="relative md:col-span-1 col-span-2 mr-3"
-            >
+            <Form.Item className="relative md:col-span-1 col-span-2 mr-3">
               <label className="block z-[300] opacity-50 font-medium w-full my-1  px-2 text-xs absolute top-[-3px]">
                 Business Address
               </label>
@@ -369,60 +361,62 @@ function Profile() {
             </Form.Item>
 
             <Form.Item
-              name="service"
+              name="services"
               className="you-are-select md:col-span-1 col-span-2 mr-3"
             >
-              <div>
-                <label className="block z-[300] opacity-50 font-medium w-full my-1 ml-1 px-2 text-xs absolute top-[-4px] flex">
-                  <Image
-                    className="mr-1"
-                    src="/assets/svgs/icons/service-icon.svg"
-                    width={15}
-                    height={15}
-                    alt="icon"
-                  />
-                  Services
-                </label>
-                <Select
-                  defaultValue={["services"]}
-                  size="large"
-                  mode="multiple"
-                  className="w-full  text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
-                  options={[
-                    { value: "jack", label: "Jack" },
-                    { value: "service", label: "Services" },
-                    { value: "Yiminghe", label: "yiminghe" },
-                    { value: "disabled", label: "Disabled", disabled: true },
-                  ]}
-                />
-              </div>
+              <Select
+                size="large"
+                mode="multiple"
+                labe
+                placeholder="Select Services"
+                className="w-full text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
+                options={[
+                  { value: "service1", label: "Service 1" },
+                  { value: "service2", label: "Service 2" },
+                  { value: "service3", label: "Service 3" },
+                  { value: "service4", label: "Service 4" },
+                ]}
+              />
             </Form.Item>
+
             <Form.Item
-              name="Gender"
+              name="courses"
               className="you-are-select md:col-span-1 col-span-2 mr-3"
             >
-              <div>
-                <label className="block z-[300] opacity-50 font-medium w-full my-1 ml-1 px-2 text-xs absolute top-[-4px] flex">
-                  <Image
-                    className="mr-1"
-                    src="/assets/svgs/icons/gender-icon.svg"
-                    width={15}
-                    height={15}
-                    alt="icon"
-                  />
-                  Gender
-                </label>
-                <Select
-                  defaultValue="male"
-                  size="large"
-                  className="w-full  text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
-                  options={[
-                    { value: "male", label: "Male" },
-                    { value: "female", label: "Female" },
-                    { value: "other", label: "Other" },
-                  ]}
-                />
-              </div>
+              <Select
+                size="large"
+                mode="multiple"
+                placeholder="Select Courses"
+                className="w-full text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"
+                options={[
+                  { value: "courses1", label: "Courses 1" },
+                  { value: "courses2", label: "Courses 2" },
+                  { value: "courses3", label: "Courses 3" },
+                  { value: "courses4", label: "Courses 4" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item
+              className="relative md:col-span-1 col-span-2 mr-3"
+              name="instagramAccount"
+            >
+              <CustomInput
+                labelText="Instagram Account"
+                type="text"
+                placeholder="www.insta.com"
+              />
+            </Form.Item>
+
+            <Form.Item
+              className="relative md:col-span-1 col-span-2 mr-3"
+              name="websiteLink"
+            >
+              <CustomInput
+                labelText="website Link"
+                type="text"
+                placeholder="Website Link"
+              />
             </Form.Item>
           </div>
         </Form>

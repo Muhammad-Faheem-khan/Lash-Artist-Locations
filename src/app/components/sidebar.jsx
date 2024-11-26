@@ -1,14 +1,22 @@
 "use client";
 import * as React from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { SidebarItem } from "./sidebarItem";
 import { Drawer } from "antd";
 
 export function Sidebar({ open, handleDrawer }) {
+  const [currentUser, setCurrentUser] = React.useState(null);
   let pathname = usePathname();
+  const router = useRouter();
+
   const noLayoutNeeded = ["/login", "/signup"];
+
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    setCurrentUser(user);
+  }, []);
 
   const isAuthPage = noLayoutNeeded.includes(pathname);
 
@@ -20,6 +28,11 @@ export function Sidebar({ open, handleDrawer }) {
     handleDrawer(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    router.push("/login");
+  };
   return (
     <Drawer
       title="Basic Drawer"
@@ -48,7 +61,7 @@ export function Sidebar({ open, handleDrawer }) {
             </Link>
           </div>
 
-          <div className="pt-12 flex-grow"  onClick={onClose}>
+          <div className="pt-12 flex-grow" onClick={onClose}>
             <SidebarItem
               icon="/assets/svgs/sidebar/dashboard.svg"
               route="/"
@@ -56,28 +69,29 @@ export function Sidebar({ open, handleDrawer }) {
             />
             <SidebarItem
               icon="/assets/svgs/sidebar/profile.svg"
-              route="/profile/1"
+              route={`/profile/${currentUser?.customerId}`}
               name="Profile"
             />
+            {currentUser?.role == "admin" && (
+              <SidebarItem
+                icon="/assets/svgs/icons/profile-icon.svg"
+                route={`/users`}
+                name="Users"
+              />
+            )}
           </div>
         </div>
-        <div className="flex justify-between py-2 px-4 border-t-2">
-          <div className="flex">
+        <div className="flex justify-center py-2 px-4 border-t-2">
+          <button
+            onClick={handleLogout}
+            className="flex items-center text-customgray-1 hover:text-customgray-1 whitespace-nowrap py-3 px-8 mb-3 cursor-pointer text-base rounded-full  bg-primary text-[#746253] opacity-[45%] hover:bg-primary hover:opacity-75"
+          >
             <img
-              className="mr-2 rounded-full w-[45px] h-[45px] object-cover"
-              src="/assets/images/image.png"
+              className="mr-2 rounded-full w-[25px] h-[25px] object-cover cursor-pointer"
+              src="/assets/svgs/icons/logout.svg"
             />
-            <div>
-              <p className="text-sm font-extralight">Welcome back 👋</p>
-              <p className="mt-0">Anaya</p>
-            </div>
-          </div>
-          <Image
-            src="/assets/svgs/icons/angle-right.svg"
-            width={20}
-            height={20}
-            alt="btn"
-          />
+            <p className="">Logout</p>
+          </button>
         </div>
       </div>
     </Drawer>

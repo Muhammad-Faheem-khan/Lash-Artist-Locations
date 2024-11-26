@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Btn({ isLoading, text, type, className }) {
+export default function Btn({ isLoading, text, type, className, color }) {
   return (
     <button
       type={type}

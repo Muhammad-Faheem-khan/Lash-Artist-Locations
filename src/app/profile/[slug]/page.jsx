@@ -1,23 +1,35 @@
-'use client'
+"use client";
 import ProfileLayout from "@/app/components/ProfileLayout";
 import InfoUnit from "@/app/components/uiComponents/infoUnit";
 import SocialUnit from "@/app/components/uiComponents/socialUnit";
-import React from "react";
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { getCustomerById } from "@/app/api/user";
 
 function Profile() {
-  const router = useRouter()
-  const user = router.query;
+  const { slug } = useParams();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (slug) {
+        const res = await getCustomerById(slug);
+        setUser(res);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
 
   return (
-    <ProfileLayout>
-      <div className="relative z-[300">
+    <ProfileLayout user={user}>
+      <div className="relative z-[300]">
         <div className="flex justify-between items-center ">
           <h3 className="text-xl text-[#746253]">Basic Information</h3>
           <Link
-            href={"1/edit"}
+            href={`${slug}/edit`}
             className="text-[#746253]  flex items-center bg-primary rounded-full px-3 py-2"
           >
             <Image
@@ -30,41 +42,53 @@ function Profile() {
             <span className="text-xs">Edit Profile</span>
           </Link>
         </div>
-        <div className="grid grid-cols-3 mt-6">
-          <InfoUnit heading="Age" value={user?.customer?.age || "24 Years"} />
+        <div className="grid grid-cols-6 mt-6">
+          <InfoUnit heading="Age" value={user?.customer?.age || "-"} />
           <InfoUnit
             heading="Years of Experince"
-            value={user?.customer?.experience || "6 Years"}
+            value={user?.customer?.experience || "-"}
+          />
+          <InfoUnit heading="Phone #" value={user?.customer?.phone || "-"} />
+          <InfoUnit
+            heading="Personal Address"
+            value={
+              (user &&
+                user?.addresses?.[0]?.address1 +
+                  user?.addresses?.[0]?.address2 +
+                  user?.addresses?.[0]?.city +
+                  user?.addresses?.[0]?.province +
+                  user?.addresses?.[0]?.country) ||
+              "-"
+            }
+          />
+          <InfoUnit heading="Email" value={user?.customer?.email || "-"} />
+          <InfoUnit
+            heading="Business Name"
+            value={user?.businessDetails?.name || "-"}
           />
           <InfoUnit
-            heading="Phone #"
-            value={user?.customer?.phone || "+123 456 7890"}
+            heading="Business Address"
+            value={user?.businessDetails?.address || "-"}
           />
           <InfoUnit
-            heading="Location"
-            value={user && (
-              user?.addresses[0]?.address1 +
-              user?.addresses[0]?.address2 +
-              user?.addresses[0]?.city +
-              user?.addresses[0]?.province +
-              user?.addresses[0]?.country
-            ) || "19 Sreet New Mexico."}
+            heading="Business Phone #"
+            value={user?.businessDetails?.businessPhone || "-"}
           />
-          <InfoUnit heading="Email" value="xyz@gamil.com" />
-          <InfoUnit heading="Business Name" value="Dummy business Name" />
-          <InfoUnit heading="Business Address" value="Dummy address" />
-          <InfoUnit heading="Business Phone #" value="919110029202" />
+          <InfoUnit
+            heading="Courses"
+            value={user?.businessDetails?.courses || "-"}
+          />
         </div>
         <div className="mt-12">
           <h3 className="text-xl text-[#746253]">Social Media</h3>
           <div className="grid grid-cols-5 flex items-center">
             <SocialUnit
               icon="/assets/svgs/icons/insta-icon.svg"
-              value= {user?.customer?.social || "luckygirls.beautyclub"}
+              value={user?.businessDetails?.instagramAccount || "-"}
             />
             <SocialUnit
               icon="/assets/svgs/icons/web-icon.svg"
-              value= {user?.customer?.website || "www.lashartist.com"}
+              value={user?.businessDetails?.websiteLink || "-"}
             />
           </div>
         </div>

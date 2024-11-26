@@ -7,9 +7,9 @@ import Btn from "@/app/components/uiComponents/Btn";
 import Image from "next/image";
 import Link from "next/link";
 import Loading from "@/app/components/uiComponents/loading";
-import { loginUser } from "@/app/api/user";
-function Login() {
-  const router = useRouter();
+import { forgetPassword } from "@/app/api/user";
+
+function ForgetPassword() {
   const [apiLoading, setApiLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
@@ -20,32 +20,21 @@ function Login() {
     setIsPageLoaded(true);
   }, []);
 
-  const handleLogin = async (values) => {
+  const handleForget = async (values) => {
     try {
       setApiLoading(true);
-      const { email, password } = values;
-      const res = await loginUser({ email, password });
-      if (res?.token) {
-        messageApi.success(res?.message);
-        localStorage.setItem("token", res?.token);
-        const currentUser = res.user;
-        if (currentUser) {
-          router.push("/");
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        } else {
-          form.resetFields();
-        }
+      const { email } = values;
+      const res = await forgetPassword({ email });
+      if (res?.message) {
+        form.resetFields();
+        messageApi.success(res?.message || "Please check your email.");
       } else {
         form.resetFields();
-        messageApi.error(
-          error?.response?.data?.message || "Invalid Email or Password"
-        );
+        messageApi.error(error?.response?.data?.message || "Invalid Email");
       }
     } catch (error) {
       form.resetFields();
-      messageApi.error(
-        error?.response?.data?.message || "Invalid Email or Password"
-      );
+      messageApi.error(error?.response?.data?.message || "Invalid Email");
     } finally {
       setApiLoading(false);
     }
@@ -58,20 +47,14 @@ function Login() {
   return (
     <div className="h-screen relative flex flex-col items-center justify-center overflow-y-hidden bg-white lg:grid lg:grid-cols-5 lg:justify-items-center lg:content-center">
       {contextHolder}
-      <div className="relative lg:col-span-3 col-span-5 flex flex-col md:w-[70%] w-[80%] justify-center space-y-10 2xl:space-y-12 pt-0 lg:mt-0">
+      <div className="relative lg:col-span-5 col-span-5 lg:w-[40%] md:w-[60%] w-[80%] flex flex-col justify-center space-y-10 2xl:space-y-12 pt-0 lg:mt-0">
         <div className="space-y-2">
-          <h1 className="font-medium text-4xl">Enter your login details</h1>
+          <h1 className="font-medium text-4xl">Forget Password</h1>
           <p className="text-secondary text-sm mt-2">
-            Don’t have an account.{" "}
-            <Link
-              href="/signup"
-              className="text-[#746253] text-xs hover:text-primary"
-            >
-              Register
-            </Link>
+            Please Enter your email to recieve an email.{" "}
           </p>
         </div>
-        <Form form={form} onFinish={handleLogin}>
+        <Form form={form} onFinish={handleForget}>
           <Form.Item
             className="relative"
             name="email"
@@ -101,59 +84,27 @@ function Login() {
               }
             />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}
-          >
-            <CustomInput
-              labelText="Password"
-              type="password"
-              placeholder="*******"
-              icon={
-                <Image
-                  src="/assets/svgs/icons/lock-icon.svg"
-                  width={20}
-                  height={20}
-                  className="ml-2 mr-2"
-                  alt="password"
-                />
-              }
-            />
-          </Form.Item>
+
           <div className="flex justify-end">
             <Link
-              href="/forget-password"
+              href="/login"
               className="text-secondary text-xs hover:text-primary"
             >
               {" "}
-              Forget Password?
+              Back to login?
             </Link>
           </div>
           <Form.Item>
             <Btn
               type="submit"
-              text="Login"
+              text={apiLoading ? "Sending Email" : "Send Email"}
               isLoading={apiLoading}
               className="w-[100%] mt-8 bg-primary text-white"
             />
           </Form.Item>
         </Form>
       </div>
-      <div className="hidden col-span-2 w-[75%] h-[70%] lg:block w-full h-screen flex justify-center items-center space-y-12">
-        <Image
-          width={500}
-          height={500}
-          src="/assets/login-page.svg"
-          className="w-full h-full"
-          alt="showcase"
-        />
-      </div>
     </div>
   );
 }
-export default Login;
+export default ForgetPassword;

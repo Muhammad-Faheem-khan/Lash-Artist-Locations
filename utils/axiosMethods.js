@@ -30,7 +30,8 @@ instance.interceptors.response.use(
       !error?.response?.data?.path?.includes("login")
     ) {
       if (typeof window !== "undefined") {
-        window.location.href = "/";
+        window.location.href = "/login";
+        localStorage.removeItem("token");
       }
       // Redirect to /login when a 401 error occurs
     }
@@ -50,6 +51,15 @@ export const axiosGet = async ({ path }) => {
 export const axiosPost = async ({ path, payload }) => {
   try {
     const res = await instance.post(path, payload);
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const axiosPatch = async ({ path, payload }) => {
+  try {
+    const res = await instance.patch(path, payload);
     return res;
   } catch (err) {
     console.log(err);
