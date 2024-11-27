@@ -15,6 +15,7 @@ const AddEditHqModal = ({ visible, mode, data, onClose, onSave }) => {
   const [address, setAddress] = useState("");
   const [latLon, setLatLon] = useState([]);
   const [options, setOptions] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     if (mode === "edit" && data) {
@@ -39,16 +40,16 @@ const AddEditHqModal = ({ visible, mode, data, onClose, onSave }) => {
 
       if (mode === "add") {
         await createLightHQ(payload);
-        message.success("HQ added successfully!");
+        messageApi.success("HQ added successfully!");
         onSave();
       } else if (mode === "edit") {
         await updateLightHQById(payload, data.id);
-        message.success("HQ updated successfully!");
+        messageApi.success("HQ updated successfully!");
         onSave();
       }
     } catch (error) {
       console.error(error);
-      message.error(`Failed to ${mode === "add" ? "add" : "edit"} HQ.`);
+      messageApi.error(`Failed to ${mode === "add" ? "add" : "edit"} HQ.`);
     }
   };
 
@@ -98,6 +99,7 @@ const AddEditHqModal = ({ visible, mode, data, onClose, onSave }) => {
       onCancel={onClose}
       footer={null}
     >
+      {contextHolder}
       <div className="p-6">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
@@ -122,13 +124,13 @@ const AddEditHqModal = ({ visible, mode, data, onClose, onSave }) => {
             </AutoComplete>
           </Form.Item>
           <Form.Item label="Website Link" name="websiteLink">
-            <Input />
+            <Input className="w-full px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg" />
           </Form.Item>
           <Form.Item label="Instagram Account" name="instagramAccount">
-            <Input />
+            <Input className="w-full px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg" />
           </Form.Item>
           <Form.Item label="Business Phone" name="businessPhone">
-            <Input />
+            <Input className="w-full px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg" />
           </Form.Item>
           <Form.Item
             label="Product Pickup Available"

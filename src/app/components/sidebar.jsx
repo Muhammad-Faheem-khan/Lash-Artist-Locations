@@ -16,7 +16,7 @@ export function Sidebar({ open = false, handleDrawer }) {
   React.useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     setCurrentUser(user);
-  }, []);
+  }, [pathname]);
 
   const isAuthPage = noLayoutNeeded.includes(pathname);
 
@@ -31,6 +31,7 @@ export function Sidebar({ open = false, handleDrawer }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("location");
     router.push("/login");
   };
   return (

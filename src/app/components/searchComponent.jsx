@@ -237,7 +237,7 @@ export function SearchSiderbar({
               Find By radius
             </label>
             <Select
-              defaultValue="5"
+              defaultValue="50"
               size="large"
               value={sortValue}
               className="w-full  text-gray-800 bg-[#EDE6DE3D] outline-none rounded-lg"

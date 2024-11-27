@@ -25,10 +25,11 @@ const MapComponent = ({ location, users, sortValue }) => {
   const GOOGLE_MAP_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY;
   const isLoaded = useGoogleMapsApi(GOOGLE_MAP_KEY);
 
-  const [zoomLevel, setZoomLevel] = useState(14);
+  const [zoomLevel, setZoomLevel] = useState(17);
   const [activeMarker, setActiveMarker] = useState({ type: null, index: null });
   const [hqData, setHqData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const router = useRouter();
 
@@ -39,11 +40,11 @@ const MapComponent = ({ location, users, sortValue }) => {
       if (response) {
         setHqData(response.data);
       } else {
-        message.error(response.message || "Failed to fetch Light Heart HQs.");
+        messageApi.error(response.message || "Failed to fetch Light Heart HQs.");
       }
     } catch (error) {
       console.error(error);
-      message.error("Something went wrong while fetching Light Heart HQs!");
+      messageApi.error("Something went wrong while fetching Light Heart HQs!");
     } finally {
       setLoading(false);
     }
@@ -51,7 +52,7 @@ const MapComponent = ({ location, users, sortValue }) => {
 
   useEffect(() => {
     fetchHqData();
-  }, []);
+  }, [location, sortValue]);
 
   const handleIconClick = (type, index) => {
     if (activeMarker.type === type && activeMarker.index === index) {
@@ -74,11 +75,10 @@ const MapComponent = ({ location, users, sortValue }) => {
   };
 
   const radiusToZoomLevel = () => {
-    if (sortValue === 5) return 17;
-    if (sortValue === 10) return 15;
-    if (sortValue === 20) return 12;
-    if (sortValue === 50) return 11;
-    return 10;
+    if (sortValue === 50) return 15;
+    if (sortValue === 100) return 12;
+    if (sortValue === 500) return 10;
+    if (sortValue === 1000) return 8;
   };
 
   useEffect(() => {
@@ -87,7 +87,8 @@ const MapComponent = ({ location, users, sortValue }) => {
 
   return (
     <div className="h-screen">
-      {isLoaded && window.google ? (
+      {contextHolder}
+      {(isLoaded || loading) && window.google ? (
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={{

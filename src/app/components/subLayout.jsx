@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
+import { isAuthPaths } from "../../../utils/constants";
 
 export function SubLayout() {
   const [open, setOpen] = useState(false);
@@ -15,12 +16,13 @@ export function SubLayout() {
     if (!token && pathname !== "/reset-password") {
       router.push("/login");
     }
-  }, [router]);
+    setOpen(false)
+  }, [pathname]);
 
   return (
     <>
       <Header handleDrawer={setOpen} />
-      <Sidebar open={open} handleDrawer={setOpen} />
+      {!isAuthPaths.includes(pathname) && <Sidebar open={open} handleDrawer={setOpen} />}
     </>
   );
 }

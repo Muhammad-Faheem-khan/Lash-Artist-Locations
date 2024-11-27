@@ -252,29 +252,6 @@ function Profile() {
                 }
               />
             </Form.Item>
-
-            <Form.Item
-              name="address"
-              className="relative md:col-span-1 col-span-2 mr-3"
-            >
-              <label className="block z-[300] opacity-50 font-medium w-full my-1  px-2 text-xs absolute top-[-3px]">
-                Personal Address
-              </label>
-              <Input
-                placeholder="Personal Address"
-                disabled={true}
-                className="px-2 py-1 pt-3 text-gray-800 bg-[#EDE6DE3D] outline-none border border-[#E8E8E8] focus:border-indigo-600 shadow-sm rounded-lg"
-                suffix={
-                  <Image
-                    src="/assets/svgs/icons/search-icon.svg"
-                    width={20}
-                    height={20}
-                    alt="search"
-                  />
-                }
-              />
-            </Form.Item>
-
             <Form.Item
               className="relative md:col-span-1 col-span-2 mr-3"
               name="businessName"

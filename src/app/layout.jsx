@@ -18,7 +18,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${notoSerif.className}`}>
+      <body className={`${notoSerif.className} text-black`}>
         <Suspense fallback={<Loading />}>
           <div className="relative z-0   h-screen w-screen overflow-hidden">
             <SubLayout />

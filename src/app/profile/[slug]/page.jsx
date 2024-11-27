@@ -44,18 +44,6 @@ function Profile() {
         </div>
         <div className="grid grid-cols-6 mt-6">
           <InfoUnit heading="Phone #" value={user?.customer?.phone || "-"} />
-          <InfoUnit
-            heading="Personal Address"
-            value={
-              (user &&
-                user?.addresses?.[0]?.address1 +
-                  user?.addresses?.[0]?.address2 +
-                  user?.addresses?.[0]?.city +
-                  user?.addresses?.[0]?.province +
-                  user?.addresses?.[0]?.country) ||
-              "-"
-            }
-          />
           <InfoUnit heading="Email" value={user?.customer?.email || "-"} />
           <InfoUnit
             heading="Business Name"

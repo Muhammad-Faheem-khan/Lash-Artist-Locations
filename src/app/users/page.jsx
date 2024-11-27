@@ -26,6 +26,7 @@ const CustomerTable = () => {
   const [loading, setLoading] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     setIsPageLoaded(true);
@@ -36,18 +37,19 @@ const CustomerTable = () => {
     try {
       const response = await getAllCustomers(page, pageSize);
       if (response) {
-        setCustomersData(response.customers);
+        const updatedCustomers = response?.customers.filter((cus) => cus?.role !== 'admin')
+        setCustomersData(updatedCustomers);
         setCustomersPagination({
           current: page,
           pageSize,
           total: response.pagination.total,
         });
       } else {
-        message.error(response.message || "Failed to fetch customers.");
+        messageApi.error(response.message || "Failed to fetch customers.");
       }
     } catch (error) {
       console.error(error);
-      message.error("Something went wrong while fetching customers!");
+      messageApi.error("Something went wrong while fetching customers!");
     } finally {
       setLoading(false);
     }
@@ -60,11 +62,11 @@ const CustomerTable = () => {
       if (response) {
         setHqData(response.data);
       } else {
-        message.error(response.message || "Failed to fetch Light Heart HQs.");
+        messageApi.error(response.message || "Failed to fetch Light Heart HQs.");
       }
     } catch (error) {
       console.error(error);
-      message.error("Something went wrong while fetching Light Heart HQs!");
+      messageApi.error("Something went wrong while fetching Light Heart HQs!");
     } finally {
       setLoading(false);
     }
@@ -81,10 +83,10 @@ const CustomerTable = () => {
         ),
       );
 
-      message.success("Role updated successfully");
+      messageApi.success("Role updated successfully");
     } catch (error) {
       console.error(error);
-      message.error("Failed to update role");
+      messageApi.error("Failed to update role");
     }
   };
 
@@ -104,10 +106,10 @@ const CustomerTable = () => {
     try {
       await deleteLightHQ(hqId);
       setHqData((prevData) => prevData.filter((item) => item.id !== hqId));
-      message.success("HQ deleted successfully");
+      messageApi.success("HQ deleted successfully");
     } catch (error) {
       console.error(error);
-      message.error("Failed to delete HQ");
+      messageApi.error("Failed to delete HQ");
     }
   };
 
@@ -152,7 +154,6 @@ const CustomerTable = () => {
           onChange={(value) => handleRoleChange(record.customerId, value)}
           className="w-full"
         >
-          <Option value="admin">Admin</Option>
           <Option value="student">Student</Option>
           <Option value="educator">Educator</Option>
           <Option value="partner">Partner</Option>
@@ -218,6 +219,7 @@ const CustomerTable = () => {
 
   return (
     <div className="p-4 mt-[5rem]">
+      {contextHolder}
       <Spin spinning={loading}>
         <h1 className="text-4xl ml-2 text-center mb-6">Admin Page</h1>
         <h1 className="text-xl text-[#746253] ml-2 mb-3">Customers List</h1>

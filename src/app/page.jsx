@@ -12,7 +12,7 @@ export default function Home() {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [userList, setUserList] = useState([]);
-  const [sortValue, setSortValue] = useState(5);
+  const [sortValue, setSortValue] = useState(50);
   const [rolesArray, setRolesArray] = useState([]);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Home() {
     lat = userLocation[0],
     lng = userLocation[1],
     page = 1,
-    limit = 10,
+    limit = 100,
   ) => {
     const payload = {
       lat,
