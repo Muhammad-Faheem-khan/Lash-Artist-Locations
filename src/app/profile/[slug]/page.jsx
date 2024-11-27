@@ -1,12 +1,12 @@
 "use client";
-import ProfileLayout from "@/app/components/ProfileLayout";
-import InfoUnit from "@/app/components/uiComponents/infoUnit";
-import SocialUnit from "@/app/components/uiComponents/socialUnit";
+import ProfileLayout from "../../components/ProfileLayout";
+import InfoUnit from "../../components/uiComponents/infoUnit";
+import SocialUnit from "../../components/uiComponents/socialUnit";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getCustomerById } from "@/app/api/user";
+import { getCustomerById } from "../../api/user";
 
 function Profile() {
   const { slug } = useParams();
@@ -43,11 +43,6 @@ function Profile() {
           </Link>
         </div>
         <div className="grid grid-cols-6 mt-6">
-          <InfoUnit heading="Age" value={user?.customer?.age || "-"} />
-          <InfoUnit
-            heading="Years of Experince"
-            value={user?.customer?.experience || "-"}
-          />
           <InfoUnit heading="Phone #" value={user?.customer?.phone || "-"} />
           <InfoUnit
             heading="Personal Address"

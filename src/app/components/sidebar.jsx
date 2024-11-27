@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SidebarItem } from "./sidebarItem";
 import { Drawer } from "antd";
 
-export function Sidebar({ open, handleDrawer }) {
+export function Sidebar({ open = false, handleDrawer }) {
   const [currentUser, setCurrentUser] = React.useState(null);
   let pathname = usePathname();
   const router = useRouter();
@@ -72,7 +72,7 @@ export function Sidebar({ open, handleDrawer }) {
               route={`/profile/${currentUser?.customerId}`}
               name="Profile"
             />
-            {currentUser?.role == "admin" && (
+            {currentUser?.role === "admin" && (
               <SidebarItem
                 icon="/assets/svgs/icons/profile-icon.svg"
                 route={`/users`}

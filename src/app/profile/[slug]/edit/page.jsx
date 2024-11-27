@@ -1,10 +1,10 @@
 "use client";
-import { getCustomerById, updateBusinessDetails } from "@/app/api/user";
-import { UploadImgModal } from "@/app/components/modals/uploadImgModal";
-import ProfileLayout from "@/app/components/ProfileLayout";
-import CustomInput from "@/app/components/uiComponents/InputField";
-import Loading from "@/app/components/uiComponents/loading";
-import useGoogleMapsApi from "@/app/context/GoogleMapContext";
+import { getCustomerById, updateBusinessDetails } from "../../../api/user";
+import { UploadImgModal } from "../../../components/modals/uploadImgModal";
+import ProfileLayout from "../../../components/ProfileLayout";
+import CustomInput from "../../../components/uiComponents/InputField";
+import Loading from "../../../components/uiComponents/loading";
+import useGoogleMapsApi from "../../../context/GoogleMapContext";
 import { AutoComplete, Form, Input, message, Select } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,7 +27,7 @@ function Profile() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const { slug } = useParams();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     setIsPageLoaded(true);
@@ -55,7 +55,6 @@ function Profile() {
           websiteLink: res?.businessDetails?.websiteLink,
         };
         setUserResponse(res);
-        console.log("updated User format", userData);
         setUser(userData);
         setBusinessAddress(res?.businessDetails?.address);
         setBusinessLatLon([
@@ -70,7 +69,6 @@ function Profile() {
 
   useEffect(() => {
     if (user) {
-      console.log("user...", user);
       form.setFieldsValue(user);
     }
   }, [user, form]);
@@ -93,10 +91,10 @@ function Profile() {
                   predictions.map((prediction) => ({
                     value: prediction.description,
                     placeId: prediction.place_id,
-                  }))
+                  })),
                 );
               }
-            }
+            },
           );
         } else {
           setBusinessOptions([]);
@@ -143,10 +141,10 @@ function Profile() {
     try {
       const res = await updateBusinessDetails(payload, slug);
       messageApi.success(res?.message);
-      router.push(`/profile/${slug}`)
+      router.push(`/profile/${slug}`);
     } catch (error) {
       messageApi.error(
-        error?.response?.data?.message || "Something went wrong"
+        error?.response?.data?.message || "Something went wrong",
       );
     }
   };

@@ -21,14 +21,14 @@ export const SORTOPTIONS = [
 ];
 
 export const userTypeIcons = {
-  leshArtist: "/assets/svgs/icons/map-star.svg",
+  lashArtist: "/assets/svgs/icons/map-star.svg",
   student: "/assets/svgs/icons/map-heart.svg",
   partner: "/assets/svgs/icons/map-cart.svg",
   educator: "/assets/svgs/icons/map-student.svg",
 };
 
 export const userCardIcons = {
-  leshArtist: "/assets/svgs/icons/card-star.svg",
+  lashArtist: "/assets/svgs/icons/card-star.svg",
   student: "/assets/svgs/icons/card-heart.svg",
   partner: "/assets/svgs/icons/card-retail.svg",
   educator: "/assets/svgs/icons/card-educator.svg",
@@ -53,6 +53,6 @@ export const Radius = 5;
 
 export const PageLimit = 10;
 
-export const DEFAULT_LOCATION = [33.5817771, -111.9305882]
+export const DEFAULT_LOCATION = [33.5817771, -111.9305882];
 
-export const isAuthPaths = ["/reset-password", "/login", "/forget-password"]
+export const isAuthPaths = ["/reset-password", "/login", "/forget-password"];

@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Form, message, Checkbox } from "antd";
-import CustomInput from "@/app/components/uiComponents/InputField";
+import { Form, message } from "antd";
 import { useRouter } from "next/navigation";
-import Btn from "@/app/components/uiComponents/Btn";
+import Btn from "../../components/uiComponents/Btn";
 import Image from "next/image";
 import Link from "next/link";
-import Loading from "@/app/components/uiComponents/loading";
-import { loginUser } from "@/app/api/user";
+import Loading from "../../components/uiComponents/loading";
+import { loginUser } from "../../api/user";
+import CustomInput from "../../components/uiComponents/InputField";
 function Login() {
   const router = useRouter();
   const [apiLoading, setApiLoading] = useState(false);
@@ -38,13 +38,13 @@ function Login() {
       } else {
         form.resetFields();
         messageApi.error(
-          error?.response?.data?.message || "Invalid Email or Password"
+          error?.response?.data?.message || "Invalid Email or Password",
         );
       }
     } catch (error) {
       form.resetFields();
       messageApi.error(
-        error?.response?.data?.message || "Invalid Email or Password"
+        error?.response?.data?.message || "Invalid Email or Password",
       );
     } finally {
       setApiLoading(false);

@@ -26,14 +26,17 @@ export default function Home() {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation([latitude, longitude]);
-          localStorage.setItem('location', JSON.stringify([latitude, longitude]))
+          localStorage.setItem(
+            "location",
+            JSON.stringify([latitude, longitude]),
+          );
         },
         (error) => {
           if (error.code === 1) {
             setUserLocation(DEFAULT_LOCATION);
-            localStorage.setItem('location', JSON.stringify(DEFAULT_LOCATION))
+            localStorage.setItem("location", JSON.stringify(DEFAULT_LOCATION));
           }
-        }
+        },
       );
     } else {
       console.log("Geolocation is not supported by this browser.");
@@ -46,7 +49,7 @@ export default function Home() {
     lat = userLocation[0],
     lng = userLocation[1],
     page = 1,
-    limit = 10
+    limit = 10,
   ) => {
     const payload = {
       lat,
@@ -82,7 +85,7 @@ export default function Home() {
               users={userList?.customers}
             />
             <SearchSiderbar
-              resposne={userList}
+              response={userList}
               sortValue={sortValue}
               handleSort={setSortValue}
               location={userLocation}

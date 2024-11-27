@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Form, message, Checkbox } from "antd";
-import CustomInput from "@/app/components/uiComponents/InputField";
-import { useRouter } from "next/navigation";
-import Btn from "@/app/components/uiComponents/Btn";
+import { Form, message } from "antd";
+import CustomInput from "../../components/uiComponents/InputField";
+import Btn from "../../components/uiComponents/Btn";
 import Image from "next/image";
 import Link from "next/link";
-import Loading from "@/app/components/uiComponents/loading";
-import { forgetPassword } from "@/app/api/user";
+import Loading from "../../components/uiComponents/loading";
+import { forgetPassword } from "../../api/user";
 
 function ForgetPassword() {
   const [apiLoading, setApiLoading] = useState(false);

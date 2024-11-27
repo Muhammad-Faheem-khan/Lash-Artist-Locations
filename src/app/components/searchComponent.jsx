@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 
 export function SearchSiderbar({
   handleLocationChange,
-  resposne,
+  response,
   fetchUsers,
   handleSort,
   sortValue,
@@ -63,10 +63,10 @@ export function SearchSiderbar({
                   predictions.map((prediction) => ({
                     value: prediction.description,
                     placeId: prediction.place_id,
-                  }))
+                  })),
                 );
               }
-            }
+            },
           );
         } else {
           setOptions([]);
@@ -78,10 +78,10 @@ export function SearchSiderbar({
   };
 
   const handleClearSearch = () => {
-    const currentLocation = JSON.parse(localStorage.getItem('location'))
-    setAddress("")
-    handleLocationChange(currentLocation)
-  }
+    const currentLocation = JSON.parse(localStorage.getItem("location"));
+    setAddress("");
+    handleLocationChange(currentLocation);
+  };
 
   const handleSelect = (value, option) => {
     if (isLoaded && window.google) {
@@ -95,7 +95,7 @@ export function SearchSiderbar({
             handleLocationChange(newLocation);
           } else {
             console.error(
-              "Geocode was not successful for the following reason: " + status
+              "Geocode was not successful for the following reason: " + status,
             );
           }
         });
@@ -107,7 +107,7 @@ export function SearchSiderbar({
 
   const handleFilteringByRadius = (value) => {
     const rolesArray = Object.keys(checkedItems).filter(
-      (key) => checkedItems[key]
+      (key) => checkedItems[key],
     );
     handleSort(value);
     fetchUsers(value, rolesArray);
@@ -115,7 +115,7 @@ export function SearchSiderbar({
 
   const handleFiltering = () => {
     const rolesArray = Object.keys(checkedItems).filter(
-      (key) => checkedItems[key]
+      (key) => checkedItems[key],
     );
     setRolesArray(rolesArray);
     fetchUsers(sortValue, rolesArray);
@@ -138,7 +138,7 @@ export function SearchSiderbar({
   };
 
   const handleRouting = (user) => {
-    router.push(`/profile/${user.customer.id}`);
+    router.push(`/profile/${user.customer.customerId}`);
   };
 
   const menu = (
@@ -270,107 +270,114 @@ export function SearchSiderbar({
         </div>
 
         <div className="my-8">
-          {resposne?.customers && resposne?.customers.length > 0 ? (
-            resposne?.customers?.map((user) => (
-              <div
-                className="flex items-start mb-4 pb-4 border-b-2 border-[#5B5B5B]"
-                key={user?.customer?.id}
-              >
-                <Image
-                  src={
-                    user?.customer?.img
-                      ? user?.customer?.img
-                      : "/assets/svgs/default-user.svg"
-                  }
-                  width={100}
-                  height={100}
-                  alt="img"
-                />
-                <div className="ml-6">
-                  <h3 className="text-[#746253] text-xl">
-                    {user?.customer?.firstName} {user?.customer?.lastName}
-                  </h3>
-                  <div className="flex items-center mt-2">
+          {response?.customers && response?.customers.length > 0 ? (
+            response?.customers?.map((user) => {
+              if (user.customer?.role !== "admin") {
+                return (
+                  <div
+                    className="flex items-start mb-4 pb-4 border-b-2 border-[#5B5B5B]"
+                    key={user?.customer?.id}
+                  >
                     <Image
-                      src="/assets/svgs/icons/star-icon.svg"
-                      width={16}
-                      height={16}
-                      alt="icon"
+                      src={
+                        user?.customer?.img
+                          ? user?.customer?.img
+                          : "/assets/svgs/default-user.svg"
+                      }
+                      width={100}
+                      height={100}
+                      alt="img"
                     />
-                    <p className="ml-3 text-[#5B5B5B] text-sm capitalize">
-                      {user?.customer?.role}
-                    </p>
+                    <div className="ml-6">
+                      <h3 className="text-[#746253] text-xl">
+                        {user?.customer?.firstName} {user?.customer?.lastName}
+                      </h3>
+                      <div className="flex items-center mt-2">
+                        <Image
+                          src="/assets/svgs/icons/star-icon.svg"
+                          width={16}
+                          height={16}
+                          alt="icon"
+                        />
+                        <p className="ml-3 text-[#5B5B5B] text-sm capitalize">
+                          {user?.customer?.role}
+                        </p>
+                      </div>
+                      <div className="flex items-center mt-2">
+                        <Image
+                          src="/assets/svgs/icons/location-icon.svg"
+                          width={16}
+                          height={16}
+                          alt="icon"
+                        />
+                        <p className="ml-3 text-[#5B5B5B] text-sm">
+                          {(user?.businessProfile?.address).slice(0, 30)}.
+                        </p>
+                      </div>
+                      {user?.businessProfile?.instagramAccount && (
+                        <div className="flex items-center mt-2">
+                          <Image
+                            src="/assets/svgs/icons/social-icon.svg"
+                            width={16}
+                            height={16}
+                            alt="icon"
+                          />
+                          <p className="ml-3 text-[#5B5B5B] text-sm">
+                            {user?.businessProfile?.instagramAccount}
+                          </p>
+                        </div>
+                      )}
+                      {user?.businessProfile?.websiteLink && (
+                        <div className="flex items-center mt-2">
+                          <Image
+                            src="/assets/svgs/icons/social-icon.svg"
+                            width={16}
+                            height={16}
+                            alt="icon"
+                          />
+                          <p className="ml-3 text-[#5B5B5B] text-sm  cursor-pointer">
+                            {user?.businessProfile?.websiteLink}
+                          </p>
+                        </div>
+                      )}
+                      <div className="flex items-center mt-2">
+                        <Image
+                          src="/assets/svgs/icons/view-profile.svg"
+                          width={16}
+                          height={16}
+                          alt="icon"
+                        />
+                        <button
+                          className="ml-3 text-[#5B5B5B] text-sm"
+                          onClick={() => {
+                            handleRouting(user);
+                          }}
+                        >
+                          Visit Profile
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center mt-2">
-                    <Image
-                      src="/assets/svgs/icons/location-icon.svg"
-                      width={16}
-                      height={16}
-                      alt="icon"
-                    />
-                    <p className="ml-3 text-[#5B5B5B] text-sm">
-                      {(
-                        user?.addresses[0]?.address1 +
-                        user?.addresses[0]?.address2 +
-                        user?.addresses[0]?.city +
-                        user?.addresses[0]?.province +
-                        user?.addresses[0]?.country
-                      ).slice(0, 30)}
-                      .
-                    </p>
-                  </div>
-                  <div className="flex items-center mt-2">
-                    <Image
-                      src="/assets/svgs/icons/social-icon.svg"
-                      width={16}
-                      height={16}
-                      alt="icon"
-                    />
-                    <p className="ml-3 text-[#5B5B5B] text-sm">
-                      {user?.customer?.social || "luckygirls.beautyclub"}
-                    </p>
-                  </div>
-                  <div className="flex items-center mt-2">
-                    <Image
-                      src="/assets/svgs/icons/social-icon.svg"
-                      width={16}
-                      height={16}
-                      alt="icon"
-                    />
-                    <p className="ml-3 text-[#5B5B5B] text-sm  cursor-pointer">
-                      {user?.customer?.website || "Visit Website"}
-                    </p>
-                  </div>
-                  <div className="flex items-center mt-2">
-                    <Image
-                      src="/assets/svgs/icons/view-profile.svg"
-                      width={16}
-                      height={16}
-                      alt="icon"
-                    />
-                    <button
-                      className="ml-3 text-[#5B5B5B] text-sm"
-                      onClick={() => {
-                        handleRouting(user);
-                      }}
-                    >
-                      {user?.customer?.profile || "Visit Profile"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
+                );
+              } else {
+                return (
+                  <p className="text-[#746253] p-4 bg-[#F0F0F0] text-xs mt-[5rem]">
+                    There are no results found based on your current search
+                  </p>
+                );
+              }
+            })
           ) : (
             <p className="text-[#746253] p-4 bg-[#F0F0F0] text-xs mt-[5rem]">
               There are no results found based on your current search
             </p>
           )}
         </div>
-        {resposne?.customers && resposne.customers?.length > 10 && (
+        {response?.customers && response.customers?.length > 10 && (
           <div className="flex justify-center">
             <Pagination
-              current={resposne?.pagination?.page}
-              total={resposne?.pagination?.total}
+              current={response?.pagination?.page}
+              total={response?.pagination?.total}
               pageSize={PageLimit}
               onChange={handlePagination}
               className="my-4"
