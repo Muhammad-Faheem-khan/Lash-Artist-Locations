@@ -17,7 +17,7 @@ const CustomerTable = () => {
   const [customersData, setCustomersData] = useState([]);
   const [customersPagination, setCustomersPagination] = useState({
     current: 1,
-    pageSize: 5,
+    pageSize: 10,
     total: 0,
   });
   const [hqData, setHqData] = useState([]);

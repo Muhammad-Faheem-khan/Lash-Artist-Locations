@@ -12,7 +12,7 @@ export default function Home() {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [userList, setUserList] = useState([]);
-  const [sortValue, setSortValue] = useState(50);
+  const [sortValue, setSortValue] = useState(100);
   const [rolesArray, setRolesArray] = useState([]);
 
   useEffect(() => {

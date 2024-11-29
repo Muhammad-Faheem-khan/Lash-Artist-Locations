@@ -14,10 +14,10 @@ export const allRoles = [
 ];
 
 export const SORTOPTIONS = [
-  { value: 50, label: "Nearest" },
   { value: 100, label: "100 KM Radius" },
   { value: 500, label: "500 KM Radius" },
   { value: 1000, label: "1000 KM Radius" },
+  { value: 10000, label: "10000 KM Radius" },
 ];
 
 export const userTypeIcons = {
@@ -49,7 +49,7 @@ export const ValueToUserTypeMap = {
   partner: "partner",
 };
 
-export const Radius = 50;
+export const Radius = 100;
 
 export const PageLimit = 100;
 

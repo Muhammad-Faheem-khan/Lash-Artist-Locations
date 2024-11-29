@@ -13,7 +13,8 @@ export function SubLayout() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token && pathname !== "/reset-password") {
+    console.log(pathname)
+    if (!token && pathname !== "/reset-password" && pathname !== "/forget-password") {
       router.push("/login");
     }
     setOpen(false)

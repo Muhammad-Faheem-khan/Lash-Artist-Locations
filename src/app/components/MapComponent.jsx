@@ -75,10 +75,10 @@ const MapComponent = ({ location, users, sortValue }) => {
   };
 
   const radiusToZoomLevel = () => {
-    if (sortValue === 50) return 15;
-    if (sortValue === 100) return 12;
-    if (sortValue === 500) return 10;
-    if (sortValue === 1000) return 8;
+    if (sortValue === 100) return 11;
+    if (sortValue === 500) return 9;
+    if (sortValue === 1000) return 7;
+    if (sortValue === 10000) return 4;
   };
 
   useEffect(() => {
