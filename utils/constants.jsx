@@ -1,5 +1,5 @@
 export const FILTEROPTIONS = [
-  { value: "leshArtist", label: "Lash Artists" },
+  { value: "lashArtist", label: "Lash Artists" },
   { value: "student", label: "Students" },
   { value: "partner", label: "Retail Partners" },
   { value: "educator", label: "Educators" },
@@ -7,7 +7,7 @@ export const FILTEROPTIONS = [
 
 export const allRoles = [
   "student",
-  "leshArtist",
+  "lashArtist",
   "partner",
   "educator",
   "lightHQ",
@@ -36,7 +36,7 @@ export const userCardIcons = {
 
 export const InitialCheckboxText = {
   student: "#2A2A2A",
-  leshArtist: "#787777",
+  lashArtist: "#787777",
   educator: "#787777",
   partner: "#787777",
   lightHQ: "#787777",
@@ -44,7 +44,7 @@ export const InitialCheckboxText = {
 
 export const ValueToUserTypeMap = {
   student: "student",
-  leshArtist: "leshArtist",
+  lashArtist: "lashArtist",
   educator: "educator",
   partner: "partner",
 };

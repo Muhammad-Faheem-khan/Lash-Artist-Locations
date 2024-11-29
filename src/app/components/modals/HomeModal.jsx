@@ -48,7 +48,7 @@ export function HomeModal({ fetchUsers, setRolesArray }) {
   const handleValuesChange = (changedValues, allValues) => {
     setCheckboxColors({
       student: allValues.student ? "#2A2A2A" : "#787777",
-      leshArtist: allValues.leshArtist ? "#2A2A2A" : "#787777",
+      lashArtist: allValues.lashArtist ? "#2A2A2A" : "#787777",
       educator: allValues.educator ? "#2A2A2A" : "#787777",
       partner: allValues.partner ? "#2A2A2A" : "#787777",
       lightHQ: allValues.lightHQ ? "#2A2A2A" : "#787777",
@@ -94,7 +94,7 @@ export function HomeModal({ fetchUsers, setRolesArray }) {
             onFinish={handleSearch}
             initialValues={{
               student: true,
-              leshArtist: false,
+              lashArtist: false,
               educator: false,
               partner: false,
               lightHQ: false,
@@ -110,12 +110,12 @@ export function HomeModal({ fetchUsers, setRolesArray }) {
             </Form.Item>
 
             <Form.Item
-              name="leshArtist"
+              name="lashArtist"
               className="mb-1"
               valuePropName="checked"
             >
               <Checkbox>
-                <p style={{ color: checkboxColors.leshArtist }}>
+                <p style={{ color: checkboxColors.lashArtist }}>
                   Light Heart Certified Artists
                 </p>
               </Checkbox>
